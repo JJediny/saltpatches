@@ -1,0 +1,56 @@
+Index: salt/modules/dockerio.py
+===================================================================
+--- salt.orig/modules/dockerio.py	2015-11-28 14:36:39.661020999 +0000
++++ salt/modules/dockerio.py	2015-11-28 14:42:59.761020999 +0000
+@@ -576,7 +576,8 @@
+                      name=None,
+                      cpu_shares=None,
+                      cpuset=None,
+-                     binds=None):
++                     binds=None,
++                     devices=None):
+     '''
+     Create a new container
+ 
+@@ -625,6 +626,8 @@
+         CPU shares (relative weight)
+     cpuset
+         CPUs in which to allow execution ('0-3' or '0,1')
++    devices 
++        Array of device mappings for docker to pass from the OS to the container
+ 
+     CLI Example:
+ 
+@@ -676,7 +679,7 @@
+                 cpu_shares=cpu_shares,
+                 cpuset=cpuset,
+                 host_config=docker.utils.create_host_config(binds=binds,
+-                                                            mem_limit=mem_limit)
++                                                            mem_limit=mem_limit, devices=devices)
+             )
+         else:
+             container_info = client.create_container(
+@@ -696,7 +699,7 @@
+                 name=name,
+                 cpu_shares=cpu_shares,
+                 cpuset=cpuset,
+-                host_config=docker.utils.create_host_config(binds=binds)
++                host_config=docker.utils.create_host_config(binds=binds,devices=devices)
+             )
+ 
+         log.trace("docker.client.create_container returned: " + str(container_info))
+Index: salt/modules/dockerng.py
+===================================================================
+--- salt.orig/modules/dockerng.py	2015-11-28 14:36:39.661020999 +0000
++++ salt/modules/dockerng.py	2015-11-28 14:56:47.645020999 +0000
+@@ -348,6 +348,10 @@
+     'command': {
+         'path': 'Config:Cmd',
+     },
++    'devices': {
++        'validator': 'string_list',
++        'path': 'HostConfig:Devices',
++    },
+     'hostname': {
+         'validator': 'string',
+         'path': 'Config:Hostname',
