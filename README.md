@@ -16,7 +16,7 @@ Quilt stack containing:
   
   If you get a client/server mismatch error, force the protocol version using
   
-      # salt 'myminion' grains.setval '"1.19"'
+      # salt 'myminion' grains.setval docker.version '"1.19"'
       
   Note the quoting to ensure this is a string value type not a float
   
